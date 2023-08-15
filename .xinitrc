@@ -1,76 +1,12 @@
-#!/bin/sh
-
-userresources=$HOME/.Xresources
-usermodmap=$HOME/.Xmodmap
-sysresources=/etc/X11/xinit/.Xresources
-sysmodmap=/etc/X11/xinit/.Xmodmap
-
-# merge in defaults and keymaps
-
-if [ -f $sysresources ]; then
-
-
-
-
-
-
-
-    xrdb -merge $sysresources
-
-fi
-
-if [ -f $sysmodmap ]; then
-    xmodmap $sysmodmap
-fi
-
-if [ -f "$userresources" ]; then
-
-
-
-
-
-
-
-    xrdb -merge "$userresources"
-
-fi
-
-if [ -f "$usermodmap" ]; then
-    xmodmap "$usermodmap"
-fi
-
-# start some nice programs
-
-if [ -d /etc/X11/xinit/xinitrc.d ] ; then
- for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
-  [ -x "$f" ] && . "$f"
- done
- unset f
-fi
-
-#twm &
-#xclock -geometry 50x50-1+1 &
-#xterm -geometry 80x50+494+51 &
-#xterm -geometry 80x20+494-0 &
-#exec xterm -geometry 80x66+0+0 -name login
-
-#statusbar
+#!bin/bash
 while [ true ] ; do
 	pow=$(cat /sys/class/power_supply/AC/online)
 	if [ $pow -eq 1 ] ; then
-		stat="charging"
+		stat="Charging"
 	else
 		stat=" "
 	fi
-	xsetroot -name "$(cat /sys/class/power_supply/BAT0/capacity)% $stat $(date +"%R %F")"
-	#xsetroot -name "($date)"
+	xsetroot -name "$(cat /sys/class/power_supply/BAT0/capacity)% $stat $(date +"%R %a %F")"
 	sleep 1s
 done &
-
-
-
-#keyboard
-setxkbmap us &
-
-#dwm
 exec dwm
